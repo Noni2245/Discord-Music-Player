@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NoniBot Web UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Upload Box -->
+    <div class="box">
+      <h2>Upload Music</h2>
+      <form class="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".mp3" required />
+        <button type="submit">Upload</button>
+      </form>
+    </div>
+
+    <!-- Now Playing + Queue -->
+    <div class="box" style="flex: 2">
+      <h2>Now Playing</h2>
+      <div id="song-title">Loading...</div>
+      <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+      
+      <h3>Queue</h3>
+      <ul id="queue-list"></ul>
+    </div>
+
+    <!-- Controls -->
+    <div class="box">
+      <h2>Controls</h2>
+      <div class="controls">
+        <button onclick="sendControl('play')">Play</button>
+        <button onclick="sendControl('pause')">Pause</button>
+        <button onclick="sendControl('skip')">Skip</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateStatus() {
+      fetch('/status')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('song-title').innerText = data.current || 'Nothing Playing';
+
+          // Progress bar
+          if (data.duration > 0) {
+            const progress = Math.min((data.elapsed / data.duration) * 100, 100);
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+          } else {
+            document.getElementById('progress-fill').style.width = '0%';
+          }
+
+          // Queue
+          const queueList = document.getElementById('queue-list');
+          queueList.innerHTML = '';
+          data.queue.forEach((track, i) => {
+            const li = document.createElement('li');
+            li.textContent = `${i + 1}. ${track}`;
+            queueList.appendChild(li);
+          });
+        })
+        .catch(err => {
+          console.error('Failed to fetch status:', err);
+        });
+    }
+
+    function sendControl(action) {
+      if (action === 'skip') {
+        fetch('/skip', { method: 'POST' });
+      } else if (action === 'pause') {
+        fetch('/pause', { method: 'POST' });
+      } else if (action === 'play') {
+        fetch('/play', { method: 'POST' });
+      }
+    }
+
+    setInterval(updateStatus, 1000);
+    updateStatus();
+  </script>
+
+</body>
+</html>
