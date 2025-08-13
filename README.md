@@ -1,3 +1,5 @@
+# Noni's goofy Discord Music Bot
+
 A simple Discord bot that joins a specified voice channel and continuously plays all `.mp3` files in a folder. Includes a modern web interface for uploading songs, skipping tracks, viewing the queue, a progress bar, and now the ability to click a song in the queue to play it immediately—all protected by a LAN-only password.
 
 ---
