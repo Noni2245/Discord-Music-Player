@@ -1,6 +1,4 @@
-# NoniLan Discord Music Bot
-
-A simple Discord bot that joins a specified voice channel and continuously plays all `.mp3` files in a folder. Includes a modern web interface for uploading songs, skipping tracks, viewing the queue, and a progress bar — all protected by a LAN-only password.
+A simple Discord bot that joins a specified voice channel and continuously plays all `.mp3` files in a folder. Includes a modern web interface for uploading songs, skipping tracks, viewing the queue, a progress bar, and now the ability to click a song in the queue to play it immediately—all protected by a LAN-only password.
 
 ---
 
@@ -13,6 +11,7 @@ A simple Discord bot that joins a specified voice channel and continuously plays
   - Skipping currently playing track
   - Viewing the current song and upcoming queue
   - Live progress bar for the current track
+  - **Click any song in the queue to play it immediately**
 - Simple password protection to restrict LAN access to the web UI
 
 ---
@@ -57,11 +56,12 @@ Start the bot with:
 - Access the web UI at: `http://localhost:3000`
 - You will be prompted for the password set in `.env`.
 - Upload new `.mp3` files and skip songs using the web interface.
+- **Click any song in the queue in the web UI to play it instantly.**
 
 ## Notes
 - The bot watches the `music` folder and auto-queues new `.mp3` files added manually or via the `web ui`.
-- the web UI uses a cookie-based simple password protection - suitable for LAN environments.
-- Ensure FFmpeg is instaleed and avaliable in your sustem path.
+- The web UI uses a cookie-based simple password protection - suitable for LAN environments.
+- Ensure FFmpeg is installed and available in your system path.
 
 ## Dependencies
 
