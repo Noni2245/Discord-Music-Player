@@ -59,6 +59,13 @@
           data.queue.forEach((track, i) => {
             const li = document.createElement('li');
             li.textContent = `${i + 1}. ${track}`;
+            // Make queue items clickable to play immediately
+            li.style.cursor = "pointer";
+            li.title = "Click to play this song now";
+            li.onclick = function() {
+              fetch(`/play/${i}`, { method: 'POST' })
+                .then(() => setTimeout(updateStatus, 200)); // update UI after short delay
+            };
             queueList.appendChild(li);
           });
         })

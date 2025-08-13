@@ -76,6 +76,17 @@ async function playNext() {
   queue.push(nextTrack);
 }
 
+// New: Play a specific index from the queue
+async function playAtIndex(index) {
+  if (index < 0 || index >= queue.length) return;
+  // Remove the selected track from the queue
+  const [selectedTrack] = queue.splice(index, 1);
+  // Insert the selected track at the front
+  queue.unshift(selectedTrack);
+  // Stop the current player, which will trigger playNext on Idle
+  player.stop(true);
+}
+
 function watchMusicFolder() {
   chokidar.watch(MUSIC_DIR, { ignoreInitial: true })
     .on('add', filePath => {
@@ -138,6 +149,16 @@ app.post('/play', (req, res) => {
 app.post('/pause', (req, res) => {
   if (player) player.pause();
   res.json({ status: 'paused' });
+});
+
+// New endpoint: Play a specific song by index
+app.post('/play/:index', async (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  if (isNaN(idx)) {
+    return res.status(400).json({ status: 'error', message: 'Invalid index' });
+  }
+  await playAtIndex(idx);
+  res.json({ status: 'playing', index: idx });
 });
 
 app.get('/status', (req, res) => {
